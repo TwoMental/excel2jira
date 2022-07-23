@@ -35,3 +35,27 @@ func validateProject(projectRaw string) (projectKey string, err error) {
 	return "", errors.New(fmt.Sprintf(
 		"can't find project named %s", projectRaw))
 }
+
+func validateIssueType(typeRaw string) (id string, err error) {
+	// 确认缓存
+	if val, ok := memo["type"][typeRaw]; ok {
+		return val.(string), nil
+	}
+	// 获取类型列表
+	list, _, _ := GetIssueTypeList()
+	if list == nil {
+		return "", errors.New("no issue type available")
+	}
+	// 查找类型
+	for _, each := range *list {
+		if strings.Contains(each.Name, typeRaw) ||
+			strings.Contains(typeRaw, each.Name) ||
+			typeRaw == each.ID {
+			return each.ID, nil
+		}
+
+	}
+	// 没找到
+	return "", errors.New(fmt.Sprintf(
+		"can't find issue type named %s", typeRaw))
+}

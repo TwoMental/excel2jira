@@ -4,5 +4,8 @@
   },
   "summary": {
     "name": "summary"
+  },
+  "issue_type": {
+    "default": "任务"
   }
 }

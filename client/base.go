@@ -1,24 +1,24 @@
 package client
 
 import (
+	"fmt"
 	"github.com/andygrunwald/go-jira"
 )
 
 var (
 	JiraClient *jira.Client
-	// TODO: lin, read from arg
-	jiraUrl  = "http://xxx.xxx.xxx"
-	jiraUser = "xxxx"
-	jiraPsw  = "xxxx"
+	JiraUrl    string
+	JiraUser   string
+	JiraPsw    string
 )
 
-func init() {
+func Init() {
 	var err error
 	auth := jira.BasicAuthTransport{
-		Username: jiraUser,
-		Password: jiraPsw,
+		Username: JiraUser,
+		Password: JiraPsw,
 	}
-	JiraClient, err = jira.NewClient(auth.Client(), jiraUrl)
+	JiraClient, err = jira.NewClient(auth.Client(), JiraUrl)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -30,5 +30,7 @@ func checkConnection() {
 	list, _, _ := JiraClient.Project.GetList()
 	if list == nil {
 		panic("no project available, pls check connection or user")
+	} else {
+		fmt.Printf("Connecting to Jira %s success!\n", JiraUrl)
 	}
 }
