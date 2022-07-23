@@ -20,20 +20,19 @@
     ```
 ## run 
 - run with go 
-  - run with release
-    - show help
-        ```shell
-        go run main.go -h
-        ```
-    - run with full args
-        ```shell
-        go run main.go \
-          --url=http://atlassian.sample.com \
-          --username=YourName \
-          --password=ChangMe \
-          --relation=relation.json \ 
-          --excel=sample.xlsx
-        ```
+  - show help
+      ```shell
+      go run main.go -h
+      ```
+  - run with full args
+      ```shell
+      go run main.go \
+        --url=http://atlassian.sample.com \
+        --username=YourName \
+        --password=ChangMe \
+        --relation=relation.json \ 
+        --excel=sample.xlsx
+      ```
 
 - run with release
   - show help
@@ -67,6 +66,7 @@
 ## TODOs
 - [ ] custom fields
 - [ ] jira auth
+- [ ] choose sheet
 - [x] parse args
 
 ## pkg
@@ -76,4 +76,4 @@
 ### arg pars
 - flag
 - [argparse]()
-- :star:2.3k[go-flags](https://github.com/jessevdk/go-flags)
+- :star:2.3k [go-flags](https://github.com/jessevdk/go-flags)
