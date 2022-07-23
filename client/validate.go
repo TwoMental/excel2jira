@@ -10,52 +10,81 @@ var (
 	memo map[string]map[string]interface{}
 )
 
-func validateProject(projectRaw string) (projectKey string, err error) {
-	// 确认缓存
-	if val, ok := memo["project"][projectRaw]; ok {
+func validateProject(rawValue string) (id string, err error) {
+	fieldName := "project"
+	// find in memo
+	if val, ok := memo[fieldName][rawValue]; ok {
 		return val.(string), nil
 	}
-	// 获取项目列表
+	// get available value list
 	list, _, _ := JiraClient.Project.GetList()
 	if list == nil {
-		return "", errors.New("no project available")
+		return "", errors.New(fmt.Sprintf(
+			"no %s available", fieldName))
 	}
-
-	// 查找项目
+	// find match value
 	for _, each := range *list {
-		if strings.Contains(each.Name, projectRaw) ||
-			strings.Contains(projectRaw, each.Name) ||
-			strings.Contains(each.Key, projectRaw) ||
-			projectRaw == each.ID {
-			return each.Key, nil
+		if strings.Contains(each.Name, rawValue) ||
+			strings.Contains(rawValue, each.Name) ||
+			strings.Contains(each.Key, rawValue) ||
+			rawValue == each.ID {
+			return each.ID, nil
 		}
 
 	}
-	// 没找到
+	// no match value
 	return "", errors.New(fmt.Sprintf(
-		"can't find project named %s", projectRaw))
+		"can't find %s named %s", fieldName, rawValue))
 }
 
-func validateIssueType(typeRaw string) (id string, err error) {
-	// 确认缓存
-	if val, ok := memo["type"][typeRaw]; ok {
+func validateIssueType(rawValue string) (id string, err error) {
+	fieldName := "type"
+	// find in memo
+	if val, ok := memo[fieldName][rawValue]; ok {
 		return val.(string), nil
 	}
 	// 获取类型列表
 	list, _, _ := GetIssueTypeList()
 	if list == nil {
-		return "", errors.New("no issue type available")
+		return "", errors.New(fmt.Sprintf(
+			"no %s available", fieldName))
 	}
-	// 查找类型
+	// get available value list
 	for _, each := range *list {
-		if strings.Contains(each.Name, typeRaw) ||
-			strings.Contains(typeRaw, each.Name) ||
-			typeRaw == each.ID {
+		if strings.Contains(each.Name, rawValue) ||
+			strings.Contains(rawValue, each.Name) ||
+			rawValue == each.ID {
 			return each.ID, nil
 		}
 
 	}
-	// 没找到
+	// find match value
 	return "", errors.New(fmt.Sprintf(
-		"can't find issue type named %s", typeRaw))
+		"can't find %s named %s", fieldName, rawValue))
+}
+
+func validatePriority(rawValue string) (id string, err error) {
+	fieldName := "priority"
+	// find in memo
+	if val, ok := memo[fieldName][rawValue]; ok {
+		return val.(string), nil
+	}
+	// get available value list
+	list, _, _ := JiraClient.Priority.GetList()
+	if len(list) == 0 {
+		return "", errors.New(fmt.Sprintf(
+			"no %s available", fieldName))
+	}
+	// find match value
+	for _, each := range list {
+		if strings.Contains(each.Name, rawValue) ||
+			strings.Contains(rawValue, each.Name) ||
+			rawValue == each.ID {
+			return each.ID, nil
+		}
+
+	}
+	// no match value
+	return "", errors.New(fmt.Sprintf(
+		"can't find %s named %s", fieldName, rawValue))
 }

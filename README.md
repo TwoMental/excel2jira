@@ -5,6 +5,7 @@
 - summary
 - description
 - issue_type
+- priority
 
 # usage
 ## config
@@ -29,7 +30,7 @@
       go run main.go \
         --url=http://atlassian.sample.com \
         --username=YourName \
-        --password=ChangMe \
+        --password=ChangeMe \
         --relation=relation.json \ 
         --excel=sample.xlsx
       ```
@@ -44,7 +45,7 @@
       ./excel2jira \
         --url=http://atlassian.sample.com \
         --username=YourName \
-        --password=ChangMe \
+        --password=ChangeMe \
         --relation=relation.json \ 
         --excel=sample.xlsx
       ```

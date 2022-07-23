@@ -23,7 +23,7 @@ func main() {
 func parseArgs() {
 	flag.StringVar(&client.JiraUrl, "url", "http://atlassian.sample.com", "Address of Jira")
 	flag.StringVar(&client.JiraUser, "username", "YourName", "Username of Jira")
-	flag.StringVar(&client.JiraPsw, "password", "ChangMe", "Password of Jira")
+	flag.StringVar(&client.JiraPsw, "password", "ChangeMe", "Password of Jira")
 	flag.StringVar(&excel.RelationFile, "relation", "relation.json", "Relation file of fields")
 	flag.StringVar(&excel.FileName, "excel", "sample.xlsx", "Excel file")
 

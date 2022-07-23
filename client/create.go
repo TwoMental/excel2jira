@@ -9,11 +9,19 @@ import (
 
 type CreateIssueParams struct {
 	ProjectRaw  string
-	ProjectKey  string
+	projectId   string
 	Summary     string
 	Description string
 	TypeRaw     string
-	TypeID      string
+	typeID      string
+	PriorityRaw string
+	priorityId  string
+	// TODO: lin, validate below fields
+	TimeTrackingRaw string
+	AssigneeRaw     string
+	FixVersionRaw   string
+	ComponentRaw    string
+	customFields    interface{}
 }
 
 type jiraRes struct {
@@ -28,7 +36,7 @@ func Create(params CreateIssueParams) (string, error) {
 		if err != nil {
 			return "", err
 		} else {
-			params.ProjectKey = projectKey
+			params.projectId = projectKey
 		}
 	}
 	// verify - issue type
@@ -37,7 +45,16 @@ func Create(params CreateIssueParams) (string, error) {
 		if err != nil {
 			return "", err
 		} else {
-			params.TypeID = typeId
+			params.typeID = typeId
+		}
+	}
+	// verify - priority
+	if params.PriorityRaw != "" {
+		priorityId, err := validatePriority(params.PriorityRaw)
+		if err != nil {
+			return "", err
+		} else {
+			params.priorityId = priorityId
 		}
 	}
 
@@ -53,19 +70,19 @@ func Create(params CreateIssueParams) (string, error) {
 }
 
 func createIssue(params CreateIssueParams) (*jira.Issue, string, error) {
-	//utils.PrintStruct(params)
 	// fields
 	fields := jira.IssueFields{
-		Project:     jira.Project{Key: params.ProjectKey},
+		Project:     jira.Project{ID: params.projectId},
 		Summary:     params.Summary,
 		Description: params.Description,
-		Type:        jira.IssueType{ID: params.TypeID},
+		Type:        jira.IssueType{ID: params.typeID},
+		Priority:    &jira.Priority{ID: params.priorityId},
 	}
 
 	// issue
 	issue := jira.Issue{Fields: &fields}
 	createdIssue, res, err := JiraClient.Issue.Create(&issue)
 	jiraRes := jiraRes{}
-	json.NewDecoder(res.Body).Decode(&jiraRes)
+	_ = json.NewDecoder(res.Body).Decode(&jiraRes)
 	return createdIssue, fmt.Sprintf("%v", jiraRes.Errs), err
 }

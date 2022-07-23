@@ -55,10 +55,9 @@ type ColRelationDetails struct {
 }
 
 func SetDefaultColRelation(relation ColRelation) {
-	// 只填必填字段
 	for _, col := range []string{
 		"project", "summary", "issue_type",
-		"priority", colJiraId, colResult} {
+		colJiraId, colResult} {
 		if _, ok := relation[col]; !ok {
 			relation[col] = &ColRelationDetails{Name: col, Id: -1}
 		}
@@ -115,10 +114,15 @@ func Start() {
 		}
 
 		createParams := client.CreateIssueParams{
-			ProjectRaw:  row.Get("project"),
-			Summary:     row.Get("summary"),
-			Description: row.Get("description"),
-			TypeRaw:     row.Get("issue_type"),
+			ProjectRaw:      row.Get("project"),
+			Summary:         row.Get("summary"),
+			Description:     row.Get("description"),
+			TypeRaw:         row.Get("issue_type"),
+			PriorityRaw:     row.Get("priority"),
+			TimeTrackingRaw: row.Get("time_tracking"),
+			AssigneeRaw:     row.Get("assignee"),
+			FixVersionRaw:   row.Get("fix_version"),
+			ComponentRaw:    row.Get("component"),
 		}
 
 		if jiraId, err := client.Create(createParams); err != nil {
@@ -167,6 +171,5 @@ func isCreated(jiraId string) bool {
 	if jiraId != "" {
 		return true
 	}
-
 	return false
 }

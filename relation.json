@@ -6,6 +6,10 @@
     "name": "summary"
   },
   "issue_type": {
-    "default": "任务"
+    "default": "task"
+  },
+  "priority": {
+    "name": "priority",
+    "default": "medium"
   }
 }

@@ -7,7 +7,7 @@ import (
 	"io"
 )
 
-func PrintBody(body io.ReadCloser) {
+func PrintReadCloser(body io.ReadCloser) {
 	buf := new(bytes.Buffer)
 	_, _ = buf.ReadFrom(body)
 	fmt.Println(buf.String())
